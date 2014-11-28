@@ -1,0 +1,30 @@
+Source: libftxf
+Section: unknown
+Priority: extra
+Maintainer: Joachim Metz <joachim.metz@gmail.com>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.8.3
+Homepage: https://github.com/libyal/libftxf/
+
+Package: libftxf
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: libftxf-dbg
+Description: Library to access the Transactional NTFS (TxF) format
+ libftxf is a library to access the Transactional NTFS (TxF) format.
+
+Package: libftxf-dbg
+Architecture: any
+Section: debug
+Depends: libftxf (= ${Source-Version}), ${misc:Depends}
+Description: Debugging symbols for libftxf
+ Debugging symbols for libftxf.
+
+Package: libftxf-dev
+Section: libdevel
+Architecture: any
+Depends: libftxf (= ${Source-Version})
+Description: Header files and libraries for developing applications for libftxf
+ Header files and libraries for developing applications for libftxf.
+

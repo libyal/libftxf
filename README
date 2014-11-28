@@ -1,0 +1,10 @@
+libftxf is a library for Transactional NTFS (TxF) data types.
+
+Project information:
+* Status: experimental
+* Licence: LGPLv3+
+
+For more information see:
+* Project documentation: https://github.com/libyal/libftxf/wiki/Home
+* How to build from source: https://github.com/libyal/libftxf/wiki/Building
+
