@@ -1,7 +1,7 @@
 /*
  * The internal libcstring header
  *
- * Copyright (C) 2010-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -19,8 +19,8 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFSCLFS_LIBCSTRING_H )
-#define _LIBFSCLFS_LIBCSTRING_H
+#if !defined( _LIBFTXF_LIBCSTRING_H )
+#define _LIBFTXF_LIBCSTRING_H
 
 #include <common.h>
 
@@ -45,7 +45,7 @@
 
 #include <libcstring.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBCSTRING ) */
 
-#endif
+#endif /* !defined( _LIBFTXF_LIBCSTRING_H ) */
 

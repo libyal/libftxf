@@ -1,7 +1,7 @@
 /*
  * Error functions
  *
- * Copyright (C) 2010-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -64,11 +64,11 @@ int libftxf_error_backtrace_sprint(
      char *string,
      size_t size );
 
-#endif
+#endif /* !defined( HAVE_LOCAL_LIBFTXF ) */
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFTXF_INTERNAL_ERROR_H ) */
 

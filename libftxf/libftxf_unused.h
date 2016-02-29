@@ -40,5 +40,5 @@
 	/* parameter */
 #endif
 
-#endif
+#endif /* !defined( _LIBFTXF_INTERNAL_UNUSED_H ) */
 

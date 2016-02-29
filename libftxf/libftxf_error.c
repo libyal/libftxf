@@ -1,7 +1,7 @@
 /*
  * Error functions
  *
- * Copyright (C) 2010-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -50,6 +50,7 @@ int libftxf_error_fprint(
 }
 
 /* Prints a descriptive string of the error to the string
+ * The end-of-string character is not included in the return value
  * Returns the number of printed characters if successful or -1 on error
  */
 int libftxf_error_sprint(
@@ -76,6 +77,7 @@ int libftxf_error_backtrace_fprint(
 }
 
 /* Prints a backtrace of the error to the string
+ * The end-of-string character is not included in the return value
  * Returns the number of printed characters if successful or -1 on error
  */
 int libftxf_error_backtrace_sprint(
@@ -89,5 +91,5 @@ int libftxf_error_backtrace_sprint(
 	         size ) );
 }
 
-#endif
+#endif /* !defined( HAVE_LOCAL_LIBFTXF ) */
 

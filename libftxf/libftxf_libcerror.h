@@ -1,7 +1,7 @@
 /*
  * The internal libcerror header
  *
- * Copyright (C) 2010-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -19,8 +19,8 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFSCLFS_LIBCERROR_H )
-#define _LIBFSCLFS_LIBCERROR_H
+#if !defined( _LIBFTXF_LIBCERROR_H )
+#define _LIBFTXF_LIBCERROR_H
 
 #include <common.h>
 
@@ -44,7 +44,7 @@
 
 #include <libcerror.h>
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBCERROR ) */
 
-#endif
+#endif /* !defined( _LIBFTXF_LIBCERROR_H ) */
 
