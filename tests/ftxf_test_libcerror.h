@@ -1,5 +1,5 @@
 /*
- * The libfdatetime header wrapper
+ * The internal libcerror header
  *
  * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,37 +19,32 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFTXF_LIBFDATETIME_H )
-#define _LIBFTXF_LIBFDATETIME_H
+#if !defined( _FTXF_TEST_LIBCERROR_H )
+#define _FTXF_TEST_LIBCERROR_H
 
 #include <common.h>
 
-/* Define HAVE_LOCAL_LIBFDATETIME for local use of libfdatetime
+/* Define HAVE_LOCAL_LIBCERROR for local use of libcerror
  */
-#if defined( HAVE_LOCAL_LIBFDATETIME )
+#if defined( HAVE_LOCAL_LIBCERROR )
 
-#include <libfdatetime_date_time_values.h>
-#include <libfdatetime_definitions.h>
-#include <libfdatetime_fat_date_time.h>
-#include <libfdatetime_filetime.h>
-#include <libfdatetime_floatingtime.h>
-#include <libfdatetime_nsf_timedate.h>
-#include <libfdatetime_posix_time.h>
-#include <libfdatetime_systemtime.h>
-#include <libfdatetime_types.h>
+#include <libcerror_definitions.h>
+#include <libcerror_error.h>
+#include <libcerror_system.h>
+#include <libcerror_types.h>
 
 #else
 
-/* If libtool DLL support is enabled set LIBFDATETIME_DLL_IMPORT
- * before including libfdatetime.h
+/* If libtool DLL support is enabled set LIBCERROR_DLL_IMPORT
+ * before including libcerror.h
  */
 #if defined( _WIN32 ) && defined( DLL_IMPORT )
-#define LIBFDATETIME_DLL_IMPORT
+#define LIBCERROR_DLL_IMPORT
 #endif
 
-#include <libfdatetime.h>
+#include <libcerror.h>
 
-#endif /* defined( HAVE_LOCAL_LIBFDATETIME ) */
+#endif /* defined( HAVE_LOCAL_LIBCERROR ) */
 
-#endif /* !defined( _LIBFTXF_LIBFDATETIME_H ) */
+#endif /* !defined( _FTXF_TEST_LIBCERROR_H ) */
 

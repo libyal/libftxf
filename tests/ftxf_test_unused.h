@@ -1,5 +1,5 @@
 /*
- * The libfguid header wrapper
+ * The unused definition
  *
  * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,31 +19,32 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFTXF_LIBFGUID_H )
-#define _LIBFTXF_LIBFGUID_H
+#if !defined( _FTXF_TEST_UNUSED_H )
+#define _FTXF_TEST_UNUSED_H
 
 #include <common.h>
 
-/* Define HAVE_LOCAL_LIBFGUID for local use of libfguid
- */
-#if defined( HAVE_LOCAL_LIBFGUID )
+#if !defined( FTXF_TEST_ATTRIBUTE_UNUSED )
 
-#include <libfguid_definitions.h>
-#include <libfguid_identifier.h>
-#include <libfguid_types.h>
+#if defined( __GNUC__ ) && __GNUC__ >= 3
+#define FTXF_TEST_ATTRIBUTE_UNUSED	__attribute__ ((__unused__))
 
 #else
+#define FTXF_TEST_ATTRIBUTE_UNUSED
 
-/* If libtool DLL support is enabled set LIBFGUID_DLL_IMPORT
- * before including libfguid.h
- */
-#if defined( _WIN32 ) && defined( DLL_IMPORT )
-#define LIBFGUID_DLL_IMPORT
-#endif
+#endif /* defined( __GNUC__ ) && __GNUC__ >= 3 */
 
-#include <libfguid.h>
+#endif /* !defined( FTXF_TEST_ATTRIBUTE_UNUSED ) */
 
-#endif /* defined( HAVE_LOCAL_LIBFGUID ) */
+#if defined( _MSC_VER )
+#define FTXF_TEST_UNREFERENCED_PARAMETER( parameter ) \
+	UNREFERENCED_PARAMETER( parameter );
 
-#endif /* !defined( _LIBFTXF_LIBFGUID_H ) */
+#else
+#define FTXF_TEST_UNREFERENCED_PARAMETER( parameter ) \
+	/* parameter */
+
+#endif /* defined( _MSC_VER ) */
+
+#endif /* !defined( _FTXF_TEST_UNUSED_H ) */
 
