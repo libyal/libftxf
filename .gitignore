@@ -119,6 +119,7 @@ stamp-h[1-9]
 /include/libftxf/types.h
 /libftxf/libftxf.rc
 /libftxf/libftxf_definitions.h
+/tests/ftxf_test_error
 /tests/ftxf_test_get_version
 /tests/tmp*
 

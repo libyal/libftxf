@@ -20,7 +20,6 @@
  */
 
 #include <common.h>
-#include <file_stream.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -28,6 +27,7 @@
 
 #include "ftxf_test_libcstring.h"
 #include "ftxf_test_libftxf.h"
+#include "ftxf_test_macros.h"
 #include "ftxf_test_unused.h"
 
 /* Tests retrieving the library version
@@ -46,11 +46,15 @@ int ftxf_test_get_version(
 	          LIBFTXF_VERSION_STRING,
 	          9 );
 
-	if( result != 0 )
-	{
-		return( 0 );
-	}
+	FTXF_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 0 );
+
 	return( 1 );
+
+on_error:
+	return( 0 );
 }
 
 /* The main program
@@ -68,10 +72,13 @@ int main(
 	FTXF_TEST_UNREFERENCED_PARAMETER( argc )
 	FTXF_TEST_UNREFERENCED_PARAMETER( argv )
 
-	if( ftxf_test_get_version() != 1 )
-	{
-		return( EXIT_FAILURE );
-	}
+	FTXF_TEST_RUN(
+	 "libftxf_get_version",
+	 ftxf_test_get_version() )
+
 	return( EXIT_SUCCESS );
+
+on_error:
+	return( EXIT_FAILURE );
 }
 
