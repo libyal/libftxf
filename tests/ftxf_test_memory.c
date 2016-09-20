@@ -55,8 +55,8 @@ void *malloc(
 	if( ftxf_test_real_malloc == NULL )
 	{
 		ftxf_test_real_malloc = dlsym(
-		                           RTLD_NEXT,
-		                           "malloc" );
+		                         RTLD_NEXT,
+		                         "malloc" );
 	}
 	if( ftxf_test_malloc_attempts_before_fail == 0 )
 	{
@@ -86,8 +86,8 @@ void *memcpy(
 	if( ftxf_test_real_memcpy == NULL )
 	{
 		ftxf_test_real_memcpy = dlsym(
-		                           RTLD_NEXT,
-		                           "memcpy" );
+		                         RTLD_NEXT,
+		                         "memcpy" );
 	}
 	if( ftxf_test_memcpy_attempts_before_fail == 0 )
 	{
@@ -119,8 +119,8 @@ void *memset(
 	if( ftxf_test_real_memset == NULL )
 	{
 		ftxf_test_real_memset = dlsym(
-		                           RTLD_NEXT,
-		                           "memset" );
+		                         RTLD_NEXT,
+		                         "memset" );
 	}
 	if( ftxf_test_memset_attempts_before_fail == 0 )
 	{
@@ -151,8 +151,8 @@ void *realloc(
 	if( ftxf_test_real_realloc == NULL )
 	{
 		ftxf_test_real_realloc = dlsym(
-		                            RTLD_NEXT,
-		                            "realloc" );
+		                          RTLD_NEXT,
+		                          "realloc" );
 	}
 	if( ftxf_test_realloc_attempts_before_fail == 0 )
 	{
