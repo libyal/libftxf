@@ -120,8 +120,8 @@ stamp-h[1-9]
 /libftxf/libftxf.rc
 /libftxf/libftxf_definitions.h
 /tests/ftxf_test_error
-/tests/ftxf_test_get_version
 /tests/ftxf_test_record
+/tests/ftxf_test_support
 /tests/tmp*
 
 # Local library dependencies specific files

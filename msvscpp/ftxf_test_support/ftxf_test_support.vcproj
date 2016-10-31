@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="ftxf_test_get_version"
-	ProjectGUID="{E2B7ADB2-92EA-44B6-A90B-B05CFB776756}"
-	RootNamespace="ftxf_test_get_version"
+	Name="ftxf_test_support"
+	ProjectGUID="{D6E5170B-E17B-4AD2-86FE-00B5FC5DB162}"
+	RootNamespace="ftxf_test_support"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -176,7 +176,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\tests\ftxf_test_get_version.c"
+				RelativePath="..\..\tests\ftxf_test_support.c"
 				>
 			</File>
 		</Filter>
