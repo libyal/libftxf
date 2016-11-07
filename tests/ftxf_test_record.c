@@ -20,6 +20,8 @@
  */
 
 #include <common.h>
+#include <file_stream.h>
+#include <types.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -27,7 +29,6 @@
 
 #include "ftxf_test_libftxf.h"
 #include "ftxf_test_libcerror.h"
-#include "ftxf_test_libcstring.h"
 #include "ftxf_test_macros.h"
 #include "ftxf_test_memory.h"
 #include "ftxf_test_unused.h"
@@ -237,7 +238,7 @@ on_error:
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain(
      int argc FTXF_TEST_ATTRIBUTE_UNUSED,
      wchar_t * const argv[] FTXF_TEST_ATTRIBUTE_UNUSED )
@@ -252,11 +253,11 @@ int main(
 
 	FTXF_TEST_RUN(
 	 "libftxf_record_initialize",
-	 ftxf_test_record_initialize() )
+	 ftxf_test_record_initialize );
 
 	FTXF_TEST_RUN(
 	 "libftxf_record_free",
-	 ftxf_test_record_free() )
+	 ftxf_test_record_free );
 
 	/* TODO: add test for libftxf_record_read */
 

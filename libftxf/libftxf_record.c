@@ -22,13 +22,15 @@
 #include <common.h>
 #include <byte_stream.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #include "libftxf_debug.h"
 #include "libftxf_definitions.h"
 #include "libftxf_libcerror.h"
 #include "libftxf_libcnotify.h"
-#include "libftxf_libcstring.h"
 #include "libftxf_libfdatetime.h"
 #include "libftxf_libfguid.h"
 #include "libftxf_libfusn.h"
@@ -152,25 +154,25 @@ int libftxf_record_read(
      size_t record_data_size,
      libcerror_error_t **error )
 {
-	libftxf_internal_record_t *internal_record  = NULL;
-	static char *function                       = "libftxf_record_read";
-	size_t record_data_offset                   = 0;
-	uint16_t record_type                        = 0;
-	uint16_t name_offset                        = 0;
-	uint16_t name_size                          = 0;
+	libftxf_internal_record_t *internal_record = NULL;
+	static char *function                      = "libftxf_record_read";
+	size_t record_data_offset                  = 0;
+	uint16_t record_type                       = 0;
+	uint16_t name_offset                       = 0;
+	uint16_t name_size                         = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
-	libcstring_system_character_t date_time_string[ 32 ];
-	libcstring_system_character_t guid_string[ 48 ];
+	system_character_t date_time_string[ 32 ];
+	system_character_t guid_string[ 48 ];
 
-	libcstring_system_character_t *value_string = NULL;
-	libfdatetime_filetime_t *filetime           = NULL;
-	libfguid_identifier_t *guid                 = NULL;
-	size_t value_string_size                    = 0;
-	uint64_t value_64bit                        = 0;
-	uint32_t value_32bit                        = 0;
-	uint16_t value_16bit                        = 0;
-	int result                                  = 0;
+	system_character_t *value_string           = NULL;
+	libfdatetime_filetime_t *filetime          = NULL;
+	libfguid_identifier_t *guid                = NULL;
+	size_t value_string_size                   = 0;
+	uint64_t value_64bit                       = 0;
+	uint32_t value_32bit                       = 0;
+	uint16_t value_16bit                       = 0;
+	int result                                 = 0;
 #endif
 
 	if( record == NULL )
@@ -325,7 +327,7 @@ int libftxf_record_read(
 
 			goto on_error;
 		}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		result = libfguid_identifier_copy_to_utf16_string(
 			  guid,
 			  (uint16_t *) guid_string,
@@ -365,7 +367,7 @@ int libftxf_record_read(
 			goto on_error;
 		}
 		libcnotify_printf(
-		 "%s: unknown6 guid\t\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM "\n",
+		 "%s: unknown6 guid\t\t\t\t\t: %" PRIs_SYSTEM "\n",
 		 function,
 		 guid_string );
 
@@ -406,7 +408,7 @@ int libftxf_record_read(
 
 			goto on_error;
 		}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		result = libfdatetime_filetime_copy_to_utf16_string(
 		          filetime,
 		          (uint16_t *) date_time_string,
@@ -433,7 +435,7 @@ int libftxf_record_read(
 			goto on_error;
 		}
 		libcnotify_printf(
-		 "%s: unknown8 filetime\t\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM " UTC\n",
+		 "%s: unknown8 filetime\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
 		 function,
 		 date_time_string );
 
@@ -643,7 +645,7 @@ int libftxf_record_read(
 
 				goto on_error;
 			}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 			result = libfdatetime_filetime_copy_to_utf16_string(
 				  filetime,
 				  (uint16_t *) date_time_string,
@@ -670,7 +672,7 @@ int libftxf_record_read(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: creation time\t\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM " UTC\n",
+			 "%s: creation time\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
 			 function,
 			 date_time_string );
 		}
@@ -696,7 +698,7 @@ int libftxf_record_read(
 
 				goto on_error;
 			}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 			result = libfdatetime_filetime_copy_to_utf16_string(
 				  filetime,
 				  (uint16_t *) date_time_string,
@@ -723,7 +725,7 @@ int libftxf_record_read(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: modification time\t\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM " UTC\n",
+			 "%s: modification time\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
 			 function,
 			 date_time_string );
 		}
@@ -749,7 +751,7 @@ int libftxf_record_read(
 
 				goto on_error;
 			}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 			result = libfdatetime_filetime_copy_to_utf16_string(
 				  filetime,
 				  (uint16_t *) date_time_string,
@@ -776,7 +778,7 @@ int libftxf_record_read(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: entry modification time\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM " UTC\n",
+			 "%s: entry modification time\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
 			 function,
 			 date_time_string );
 		}
@@ -802,7 +804,7 @@ int libftxf_record_read(
 
 				goto on_error;
 			}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 			result = libfdatetime_filetime_copy_to_utf16_string(
 				  filetime,
 				  (uint16_t *) date_time_string,
@@ -829,7 +831,7 @@ int libftxf_record_read(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: access time\t\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM " UTC\n",
+			 "%s: access time\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
 			 function,
 			 date_time_string );
 		}
@@ -943,7 +945,7 @@ int libftxf_record_read(
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 			result = libuna_utf16_string_size_from_utf16_stream(
 				  &( record_data[ name_offset ] ),
 				  name_size,
@@ -969,7 +971,7 @@ int libftxf_record_read(
 
 				goto on_error;
 			}
-			value_string = libcstring_system_string_allocate(
+			value_string = system_string_allocate(
 			                value_string_size );
 
 			if( value_string == NULL )
@@ -983,7 +985,7 @@ int libftxf_record_read(
 
 				goto on_error;
 			}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 			result = libuna_utf16_string_copy_from_utf16_stream(
 				  (libuna_utf16_character_t *) value_string,
 				  value_string_size,
@@ -1012,7 +1014,7 @@ int libftxf_record_read(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: name\t\t\t\t\t\t: %" PRIs_LIBCSTRING_SYSTEM "\n",
+			 "%s: name\t\t\t\t\t\t: %" PRIs_SYSTEM "\n",
 			 function,
 			 value_string );
 

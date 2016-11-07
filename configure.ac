@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libftxf],
- [20160920],
+ [20161107],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -51,9 +51,6 @@ AX_TYPES_CHECK_LOCAL
 dnl Checks for libraries and library functions
 AX_COMMON_CHECK_LOCAL
 
-dnl Check for enabling libcstring for cross-platform C string functions
-AX_LIBCSTRING_CHECK_ENABLE
-
 dnl Check for enabling libcerror for cross-platform C error functions
 AX_LIBCERROR_CHECK_ENABLE
 
@@ -63,10 +60,10 @@ AX_LIBCNOTIFY_CHECK_ENABLE
 dnl Check for enabling libuna for Unicode string support
 AX_LIBUNA_CHECK_ENABLE
 
-dnl Check for enabling libfdatetime for file date and time support
+dnl Check for enabling libfdatetime for date and time formats support
 AX_LIBFDATETIME_CHECK_ENABLE
 
-dnl Check for enabling libfguid for file GUID/UUID support
+dnl Check for enabling libfguid for GUID/UUID format support
 AX_LIBFGUID_CHECK_ENABLE
 
 dnl Check for enabling libfusn for file Update Sequence Number (USN) Journal type support
@@ -117,7 +114,7 @@ CFLAGS="$CFLAGS -Wall";
 
 dnl Check if requires and build requires should be set in spec file
 AS_IF(
- [test "x$ac_cv_libcstring" = xyes || test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libfdatetime" = xyes || test "x$ac_cv_libfguid" = xyes || test "x$ac_cv_libfusn" = xyes],
+ [test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libfdatetime" = xyes || test "x$ac_cv_libfguid" = xyes || test "x$ac_cv_libfusn" = xyes],
  [AC_SUBST(
   [libftxf_spec_requires],
   [Requires:])
@@ -145,7 +142,6 @@ dnl Have configure make the Makefiles
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([include/Makefile])
 AC_CONFIG_FILES([common/Makefile])
-AC_CONFIG_FILES([libcstring/Makefile])
 AC_CONFIG_FILES([libcerror/Makefile])
 AC_CONFIG_FILES([libcnotify/Makefile])
 AC_CONFIG_FILES([libuna/Makefile])
@@ -178,7 +174,6 @@ AC_OUTPUT
 
 AC_MSG_NOTICE([
 Building:
-   libcstring support:   $ac_cv_libcstring
    libcerror support:    $ac_cv_libcerror
    libcnotify support:   $ac_cv_libcnotify
    libuna support:       $ac_cv_libuna

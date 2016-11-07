@@ -4,7 +4,6 @@ MSVSCPP_FILES = \
 	ftxf_test_support/ftxf_test_support.vcproj \
 	libcerror/libcerror.vcproj \
 	libcnotify/libcnotify.vcproj \
-	libcstring/libcstring.vcproj \
 	libfdatetime/libfdatetime.vcproj \
 	libfguid/libfguid.vcproj \
 	libftxf/libftxf.vcproj \

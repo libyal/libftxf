@@ -39,7 +39,7 @@ enum LIBFTXF_ERROR_DOMAINS
 	LIBFTXF_ERROR_DOMAIN_INPUT			= (int) 'i',
 	LIBFTXF_ERROR_DOMAIN_MEMORY			= (int) 'm',
 	LIBFTXF_ERROR_DOMAIN_OUTPUT			= (int) 'o',
-	LIBFTXF_ERROR_DOMAIN_RUNTIME			= (int) 'r',
+	LIBFTXF_ERROR_DOMAIN_RUNTIME			= (int) 'r'
 };
 
 /* The argument error codes
@@ -208,6 +208,17 @@ enum LIBFTXF_MEMORY_ERROR
 	LIBFTXF_MEMORY_ERROR_SET_FAILED			= 3
 };
 
+/* The output error codes
+ */
+enum LIBFTXF_OUTPUT_ERROR
+{
+	LIBFTXF_OUTPUT_ERROR_GENERIC			= 0,
+
+	/* There is insuficient space to write the output
+	 */
+	LIBFTXF_OUTPUT_ERROR_INSUFFICIENT_SPACE		= 1
+};
+
 /* The runtime error codes
  * to signify errors regarding runtime processing
  */
@@ -276,16 +287,5 @@ enum LIBFTXF_RUNTIME_ERROR
 	LIBFTXF_RUNTIME_ERROR_ABORT_REQUESTED		= 15
 };
 
-/* The output error codes
- */
-enum LIBFTXF_OUTPUT_ERROR
-{
-	LIBFTXF_OUTPUT_ERROR_GENERIC			= 0,
-
-	/* There is insuficient space to write the output
-	 */
-	LIBFTXF_OUTPUT_ERROR_INSUFFICIENT_SPACE		= 1
-};
-
-#endif
+#endif /* !defined( _LIBFTXF_ERROR_H ) */
 

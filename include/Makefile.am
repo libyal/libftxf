@@ -2,7 +2,6 @@ include_HEADERS = \
 	libftxf.h
 
 pkginclude_HEADERS = \
-	libftxf/codepage.h \
 	libftxf/definitions.h \
 	libftxf/error.h \
 	libftxf/extern.h \
@@ -21,6 +20,7 @@ MAINTAINERCLEANFILES = \
 distclean: clean
 	/bin/rm -f libftxf.h
 	/bin/rm -f libftxf/definitions.h
+	/bin/rm -f libftxf/features.h
 	/bin/rm -f libftxf/types.h
 	/bin/rm -f Makefile
 

@@ -7,6 +7,6 @@ Name: libftxf
 Description: Library to access the Transactional NTFS (TxF) format
 Version: @VERSION@
 Libs: -L${libdir} -lftxf
-Libs.private: @ax_libcerror_pc_libs_private@ @ax_libcnotify_pc_libs_private@ @ax_libcstring_pc_libs_private@ @ax_libfdatetime_pc_libs_private@ @ax_libfguid_pc_libs_private@ @ax_libfusn_pc_libs_private@ @ax_libuna_pc_libs_private@
+Libs.private: @ax_libcerror_pc_libs_private@ @ax_libcnotify_pc_libs_private@ @ax_libfdatetime_pc_libs_private@ @ax_libfguid_pc_libs_private@ @ax_libfusn_pc_libs_private@ @ax_libuna_pc_libs_private@
 Cflags: -I${includedir}
 

@@ -20,6 +20,8 @@
  */
 
 #include <common.h>
+#include <file_stream.h>
+#include <types.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -108,7 +110,7 @@ int ftxf_test_error_backtrace_sprint(
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain(
      int argc FTXF_TEST_ATTRIBUTE_UNUSED,
      wchar_t * const argv[] FTXF_TEST_ATTRIBUTE_UNUSED )
@@ -123,23 +125,23 @@ int main(
 
 	FTXF_TEST_RUN(
 	 "libftxf_error_free",
-	 ftxf_test_error_free() )
+	 ftxf_test_error_free );
 
 	FTXF_TEST_RUN(
 	 "libftxf_error_fprint",
-	 ftxf_test_error_fprint() )
+	 ftxf_test_error_fprint );
 
 	FTXF_TEST_RUN(
 	 "libftxf_error_sprint",
-	 ftxf_test_error_sprint() )
+	 ftxf_test_error_sprint );
 
 	FTXF_TEST_RUN(
 	 "libftxf_error_backtrace_fprint",
-	 ftxf_test_error_backtrace_fprint() )
+	 ftxf_test_error_backtrace_fprint );
 
 	FTXF_TEST_RUN(
 	 "libftxf_error_backtrace_sprint",
-	 ftxf_test_error_backtrace_sprint() )
+	 ftxf_test_error_backtrace_sprint );
 
 	return( EXIT_SUCCESS );
 

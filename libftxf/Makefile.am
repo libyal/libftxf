@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCNOTIFY_CPPFLAGS@ \
 	@LIBUNA_CPPFLAGS@ \
@@ -21,7 +20,6 @@ libftxf_la_SOURCES = \
 	libftxf_error.c libftxf_error.h \
 	libftxf_libcerror.h \
 	libftxf_libcnotify.h \
-	libftxf_libcstring.h \
 	libftxf_libfdatetime.h \
 	libftxf_libfguid.h \
 	libftxf_libfusn.h \
@@ -31,7 +29,6 @@ libftxf_la_SOURCES = \
 	libftxf_types.h
 
 libftxf_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCNOTIFY_LIBADD@ \
 	@LIBUNA_LIBADD@ \

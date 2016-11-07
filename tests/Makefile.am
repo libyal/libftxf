@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBFTXF_DLL_IMPORT@
 
@@ -24,17 +23,14 @@ check_PROGRAMS = \
 
 ftxf_test_error_SOURCES = \
 	ftxf_test_error.c \
-	ftxf_test_libcstring.h \
 	ftxf_test_libftxf.h \
 	ftxf_test_macros.h \
 	ftxf_test_unused.h
 
 ftxf_test_error_LDADD = \
-	../libftxf/libftxf.la \
-	@LIBCSTRING_LIBADD@
+	../libftxf/libftxf.la
 
 ftxf_test_record_SOURCES = \
-	ftxf_test_libcstring.h \
 	ftxf_test_libftxf.h \
 	ftxf_test_macros.h \
 	ftxf_test_memory.c ftxf_test_memory.h \
@@ -43,19 +39,16 @@ ftxf_test_record_SOURCES = \
 
 ftxf_test_record_LDADD = \
 	../libftxf/libftxf.la \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 ftxf_test_support_SOURCES = \
-	ftxf_test_libcstring.h \
 	ftxf_test_libftxf.h \
 	ftxf_test_macros.h \
 	ftxf_test_support.c \
 	ftxf_test_unused.h
 
 ftxf_test_support_LDADD = \
-	../libftxf/libftxf.la \
-	@LIBCSTRING_LIBADD@
+	../libftxf/libftxf.la
 
 MAINTAINERCLEANFILES = \
 	Makefile.in
