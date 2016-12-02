@@ -24,10 +24,6 @@
 
 /* The libftxf type support features
  */
-#if defined( WINAPI ) || @HAVE_WIDE_CHARACTER_TYPE@
-#define LIBFTXF_HAVE_WIDE_CHARACTER_TYPE	1
-#endif
-
 #if !defined( LIBFTXF_DEPRECATED )
 #if defined( __GNUC__ ) && __GNUC__ >= 3
 #define LIBFTXF_DEPRECATED	__attribute__ ((__deprecated__))

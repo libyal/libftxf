@@ -38,9 +38,9 @@
 #include <libftxf/extern.h>
 
 #else
-#define LIBFTXF_EXTERN	extern
+#define LIBFTXF_EXTERN	/* extern */
 
-#endif
+#endif /* !defined( HAVE_LOCAL_LIBFTXF ) */
 
 #endif /* !defined( _LIBFTXF_INTERNAL_EXTERN_H ) */
 

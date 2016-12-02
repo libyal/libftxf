@@ -40,5 +40,5 @@ void libftxf_debug_print_file_attribute_flags(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFTXF_DEBUG_H ) */
 
