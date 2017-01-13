@@ -1,7 +1,7 @@
 /*
- * Library record type testing program
+ * Library record type test program
  *
- * Copyright (C) 2011-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2011-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -27,8 +27,8 @@
 #include <stdlib.h>
 #endif
 
-#include "ftxf_test_libftxf.h"
 #include "ftxf_test_libcerror.h"
+#include "ftxf_test_libftxf.h"
 #include "ftxf_test_macros.h"
 #include "ftxf_test_memory.h"
 #include "ftxf_test_unused.h"
@@ -39,11 +39,17 @@
 int ftxf_test_record_initialize(
      void )
 {
-	libftxf_record_t *record = NULL;
-	libcerror_error_t *error = NULL;
-	int result               = 0;
+	libcerror_error_t *error        = NULL;
+	libftxf_record_t *record        = NULL;
+	int result                      = 0;
 
-	/* Test libftxf_record_initialize without entries
+#if defined( HAVE_FTXF_TEST_MEMORY )
+	int number_of_malloc_fail_tests = 1;
+	int number_of_memset_fail_tests = 1;
+	int test_number                 = 0;
+#endif
+
+	/* Test regular cases
 	 */
 	result = libftxf_record_initialize(
 	          &record,
@@ -119,65 +125,89 @@ int ftxf_test_record_initialize(
 
 #if defined( HAVE_FTXF_TEST_MEMORY )
 
-	/* Test libftxf_record_initialize with malloc failing
-	 */
-	ftxf_test_malloc_attempts_before_fail = 0;
-
-	result = libftxf_record_initialize(
-	          &record,
-	          &error );
-
-	if( ftxf_test_malloc_attempts_before_fail != -1 )
+	for( test_number = 0;
+	     test_number < number_of_malloc_fail_tests;
+	     test_number++ )
 	{
-		ftxf_test_malloc_attempts_before_fail = -1;
+		/* Test libftxf_record_initialize with malloc failing
+		 */
+		ftxf_test_malloc_attempts_before_fail = test_number;
+
+		result = libftxf_record_initialize(
+		          &record,
+		          &error );
+
+		if( ftxf_test_malloc_attempts_before_fail != -1 )
+		{
+			ftxf_test_malloc_attempts_before_fail = -1;
+
+			if( record != NULL )
+			{
+				libftxf_record_free(
+				 &record,
+				 NULL );
+			}
+		}
+		else
+		{
+			FTXF_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
+
+			FTXF_TEST_ASSERT_IS_NULL(
+			 "record",
+			 record );
+
+			FTXF_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
+
+			libcerror_error_free(
+			 &error );
+		}
 	}
-	else
+	for( test_number = 0;
+	     test_number < number_of_memset_fail_tests;
+	     test_number++ )
 	{
-		FTXF_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+		/* Test libftxf_record_initialize with memset failing
+		 */
+		ftxf_test_memset_attempts_before_fail = test_number;
 
-		FTXF_TEST_ASSERT_IS_NULL(
-		 "record",
-		 record );
+		result = libftxf_record_initialize(
+		          &record,
+		          &error );
 
-		FTXF_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
+		if( ftxf_test_memset_attempts_before_fail != -1 )
+		{
+			ftxf_test_memset_attempts_before_fail = -1;
 
-		libcerror_error_free(
-		 &error );
-	}
-	/* Test libftxf_record_initialize with memset failing
-	 */
-	ftxf_test_memset_attempts_before_fail = 0;
+			if( record != NULL )
+			{
+				libftxf_record_free(
+				 &record,
+				 NULL );
+			}
+		}
+		else
+		{
+			FTXF_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
 
-	result = libftxf_record_initialize(
-	          &record,
-	          &error );
+			FTXF_TEST_ASSERT_IS_NULL(
+			 "record",
+			 record );
 
-	if( ftxf_test_memset_attempts_before_fail != -1 )
-	{
-		ftxf_test_memset_attempts_before_fail = -1;
-	}
-	else
-	{
-		FTXF_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+			FTXF_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
 
-		FTXF_TEST_ASSERT_IS_NULL(
-		 "record",
-		 record );
-
-		FTXF_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
-
-		libcerror_error_free(
-		 &error );
+			libcerror_error_free(
+			 &error );
+		}
 	}
 #endif /* defined( HAVE_FTXF_TEST_MEMORY ) */
 
@@ -259,7 +289,13 @@ int main(
 	 "libftxf_record_free",
 	 ftxf_test_record_free );
 
-	/* TODO: add test for libftxf_record_read */
+	/* TODO: add tests for libftxf_record_read */
+
+#if defined( __GNUC__ )
+
+	/* TODO: add tests for libftxf_record_read_update_journal_entry_list */
+
+#endif /* defined( __GNUC__ ) */
 
 	return( EXIT_SUCCESS );
 
