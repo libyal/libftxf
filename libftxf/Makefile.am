@@ -26,7 +26,8 @@ libftxf_la_SOURCES = \
 	libftxf_libuna.h \
 	libftxf_record.c libftxf_record.h \
 	libftxf_support.c libftxf_support.h \
-	libftxf_types.h
+	libftxf_types.h \
+	libftxf_unused.h
 
 libftxf_la_LIBADD = \
 	@LIBCERROR_LIBADD@ \
