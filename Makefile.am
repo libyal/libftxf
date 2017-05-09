@@ -21,10 +21,9 @@ DPKG_FILES = \
 	dpkg/compat \
 	dpkg/control \
 	dpkg/copyright \
-	dpkg/copyright.in \
 	dpkg/rules \
-	dpkg/libftxf-dev.docs \
-	dpkg/libftxf.docs \
+	dpkg/libftxf-dev.install \
+	dpkg/libftxf.install \
 	dpkg/source/format
 
 GETTEXT_FILES = \
