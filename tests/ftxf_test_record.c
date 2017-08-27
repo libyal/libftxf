@@ -291,11 +291,11 @@ int main(
 
 	/* TODO: add tests for libftxf_record_read */
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT )
 
 	/* TODO: add tests for libftxf_record_read_update_journal_entry_list */
 
-#endif /* defined( __GNUC__ ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT ) */
 
 	return( EXIT_SUCCESS );
 
