@@ -37,8 +37,11 @@
 
 #include <libftxf/extern.h>
 
+#define LIBFTXF_EXTERN_VARIABLE	LIBFTXF_EXTERN
+
 #else
-#define LIBFTXF_EXTERN	/* extern */
+#define LIBFTXF_EXTERN		/* extern */
+#define LIBFTXF_EXTERN_VARIABLE	extern
 
 #endif /* !defined( HAVE_LOCAL_LIBFTXF ) */
 
