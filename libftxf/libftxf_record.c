@@ -145,34 +145,26 @@ int libftxf_record_free(
 	return( 1 );
 }
 
-/* Reads the record
+/* Copies the record from the byte stream
  * Returns 1 if successful or -1 on error
  */
-int libftxf_record_read(
+int libftxf_record_copy_from_byte_stream(
      libftxf_record_t *record,
-     const uint8_t *record_data,
-     size_t record_data_size,
+     const uint8_t *byte_stream,
+     size_t byte_stream_size,
      libcerror_error_t **error )
 {
 	libftxf_internal_record_t *internal_record = NULL;
 	static char *function                      = "libftxf_record_read";
-	size_t record_data_offset                  = 0;
+	size_t byte_stream_offset                  = 0;
 	uint16_t record_type                       = 0;
 	uint16_t name_offset                       = 0;
 	uint16_t name_size                         = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
-	system_character_t date_time_string[ 32 ];
-	system_character_t guid_string[ 48 ];
-
-	system_character_t *value_string           = NULL;
-	libfdatetime_filetime_t *filetime          = NULL;
-	libfguid_identifier_t *guid                = NULL;
-	size_t value_string_size                   = 0;
 	uint64_t value_64bit                       = 0;
 	uint32_t value_32bit                       = 0;
 	uint16_t value_16bit                       = 0;
-	int result                                 = 0;
 #endif
 
 	if( record == NULL )
@@ -188,35 +180,35 @@ int libftxf_record_read(
 	}
 	internal_record = (libftxf_internal_record_t *) record;
 
-	if( record_data == NULL )
+	if( byte_stream == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid record data.",
+		 "%s: invalid byte stream.",
 		 function );
 
 		return( -1 );
 	}
-	if( record_data_size > (size_t) SSIZE_MAX )
+	if( byte_stream_size > (size_t) SSIZE_MAX )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid record data size value exceeds maximum.",
+		 "%s: invalid byte stream size value exceeds maximum.",
 		 function );
 
 		return( -1 );
 	}
-	if( record_data_size < sizeof( ftxf_record_header_t ) )
+	if( byte_stream_size < sizeof( ftxf_record_header_t ) )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: invalid record data value too small.",
+		 "%s: invalid byte stream value too small.",
 		 function );
 
 		return( -1 );
@@ -228,24 +220,24 @@ int libftxf_record_read(
 		 "%s: record header data:\n",
 		 function );
 		libcnotify_print_data(
-		 record_data,
+		 byte_stream,
 		 sizeof( ftxf_record_header_t ),
 		 0 );
 	}
 #endif
 	byte_stream_copy_to_uint16_little_endian(
-	 ( (ftxf_record_header_t *) record_data )->record_type,
+	 ( (ftxf_record_header_t *) byte_stream )->record_type,
 	 record_type );
 
 	byte_stream_copy_to_uint32_little_endian(
-	 ( (ftxf_record_header_t *) record_data )->record_size,
+	 ( (ftxf_record_header_t *) byte_stream )->record_size,
 	 internal_record->size );
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
 	{
 		byte_stream_copy_to_uint32_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown1,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown1,
 		 value_32bit );
 		libcnotify_printf(
 		 "%s: unknown1\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
@@ -258,7 +250,7 @@ int libftxf_record_read(
 		 record_type );
 
 		byte_stream_copy_to_uint16_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown2,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown2,
 		 value_16bit );
 		libcnotify_printf(
 		 "%s: unknown2\t\t\t\t\t\t: 0x%04" PRIx16 "\n",
@@ -266,7 +258,7 @@ int libftxf_record_read(
 		 value_16bit );
 
 		byte_stream_copy_to_uint64_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->file_identifier,
+		 ( (ftxf_record_header_t *) byte_stream )->file_identifier,
 		 value_64bit );
 		libcnotify_printf(
 		 "%s: file identifier\t\t\t\t\t: 0x%08" PRIx64 "\n",
@@ -274,7 +266,7 @@ int libftxf_record_read(
 		 value_64bit );
 
 		byte_stream_copy_to_uint64_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->file_reference,
+		 ( (ftxf_record_header_t *) byte_stream )->file_reference,
 		 value_64bit );
 		libcnotify_printf(
 		 "%s: file reference\t\t\t\t\t: MFT entry: %" PRIu64 ", sequence: %" PRIu64 "\n",
@@ -283,7 +275,7 @@ int libftxf_record_read(
 		 value_64bit >> 48 );
 
 		byte_stream_copy_to_uint32_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown4,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown4,
 		 value_32bit );
 		libcnotify_printf(
 		 "%s: unknown4\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
@@ -291,166 +283,56 @@ int libftxf_record_read(
 		 value_32bit );
 
 		byte_stream_copy_to_uint32_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown5,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown5,
 		 value_32bit );
 		libcnotify_printf(
 		 "%s: unknown5\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 value_32bit );
 
-		if( libfguid_identifier_initialize(
-		     &guid,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-			 "%s: unable to create GUID.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfguid_identifier_copy_from_byte_stream(
-		     guid,
-		     ( (ftxf_record_header_t *) record_data )->unknown6,
+		if( libftxf_debug_print_guid_value(
+		     function,
+		     "unknown6 guid\t\t\t\t\t",
+		     ( (ftxf_record_header_t *) byte_stream )->unknown6,
 		     16,
 		     LIBFGUID_ENDIAN_LITTLE,
+		     LIBFGUID_STRING_FORMAT_FLAG_USE_LOWER_CASE,
 		     error ) != 1 )
 		{
 			libcerror_error_set(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-			 "%s: unable to copy byte stream to GUID.",
+			 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+			 "%s: unable to print GUID value.",
 			 function );
 
-			goto on_error;
+			return( -1 );
 		}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-		result = libfguid_identifier_copy_to_utf16_string(
-			  guid,
-			  (uint16_t *) guid_string,
-			  48,
-			  LIBFGUID_STRING_FORMAT_FLAG_USE_LOWER_CASE,
-			  error );
-#else
-		result = libfguid_identifier_copy_to_utf8_string(
-			  guid,
-			  (uint8_t *) guid_string,
-			  48,
-			  LIBFGUID_STRING_FORMAT_FLAG_USE_LOWER_CASE,
-			  error );
-#endif
-		if( result != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-			 "%s: unable to copy GUID to string.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfguid_identifier_free(
-		     &guid,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-			 "%s: unable to free GUID.",
-			 function );
-
-			goto on_error;
-		}
-		libcnotify_printf(
-		 "%s: unknown6 guid\t\t\t\t\t: %" PRIs_SYSTEM "\n",
-		 function,
-		 guid_string );
-
 		byte_stream_copy_to_uint64_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown7,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown7,
 		 value_64bit );
 		libcnotify_printf(
 		 "%s: unknown7\t\t\t\t\t\t: 0x%08" PRIx64 "\n",
 		 function,
 		 value_64bit );
 
-		if( libfdatetime_filetime_initialize(
-		     &filetime,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-			 "%s: unable to create filetime.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfdatetime_filetime_copy_from_byte_stream(
-		     filetime,
-		     ( (ftxf_record_header_t *) record_data )->unknown8,
+		if( libftxf_debug_print_filetime_value(
+		     function,
+		     "unknown8 filetime\t\t\t\t\t",
+		     ( (ftxf_record_header_t *) byte_stream )->unknown8,
 		     8,
 		     LIBFDATETIME_ENDIAN_LITTLE,
+		     LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
 		     error ) != 1 )
 		{
 			libcerror_error_set(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-			 "%s: unable to copy filetime from byte stream.",
+			 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+			 "%s: unable to print FILETIME value.",
 			 function );
 
-			goto on_error;
-		}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-		result = libfdatetime_filetime_copy_to_utf16_string(
-		          filetime,
-		          (uint16_t *) date_time_string,
-		          32,
-		          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-		          error );
-#else
-		result = libfdatetime_filetime_copy_to_utf8_string(
-		          filetime,
-		          (uint8_t *) date_time_string,
-		          32,
-		          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-		          error );
-#endif
-		if( result != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-			 "%s: unable to copy filetime to date time string.",
-			 function );
-
-			goto on_error;
-		}
-		libcnotify_printf(
-		 "%s: unknown8 filetime\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
-		 function,
-		 date_time_string );
-
-		if( libfdatetime_filetime_free(
-		     &filetime,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-			 "%s: unable to free filetime.",
-			 function );
-
-			goto on_error;
+			return( -1 );
 		}
 		libcnotify_printf(
 		 "%s: record size\t\t\t\t\t: %" PRIu32 "\n",
@@ -458,7 +340,7 @@ int libftxf_record_read(
 		 internal_record->size );
 
 		byte_stream_copy_to_uint32_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown9,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown9,
 		 value_32bit );
 		libcnotify_printf(
 		 "%s: unknown9\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
@@ -466,7 +348,7 @@ int libftxf_record_read(
 		 value_32bit );
 
 		byte_stream_copy_to_uint64_little_endian(
-		 ( (ftxf_record_header_t *) record_data )->unknown10,
+		 ( (ftxf_record_header_t *) byte_stream )->unknown10,
 		 value_64bit );
 		libcnotify_printf(
 		 "%s: unknown10\t\t\t\t\t\t: 0x%08" PRIx64 "\n",
@@ -477,10 +359,10 @@ int libftxf_record_read(
 		 "\n" );
 	}
 #endif
-	record_data_offset = sizeof( ftxf_record_header_t );
+	byte_stream_offset = sizeof( ftxf_record_header_t );
 
 	if( ( (size_t) internal_record->size < sizeof( ftxf_record_header_t ) )
-	 || ( (size_t) internal_record->size > record_data_size ) )
+	 || ( (size_t) internal_record->size > byte_stream_size ) )
 	{
 		libcerror_error_set(
 		 error,
@@ -489,14 +371,14 @@ int libftxf_record_read(
 		 "%s: record size value out of bounds.",
 		 function );
 
-		goto on_error;
+		return( -1 );
 	}
 	switch( record_type )
 	{
 		case LIBFTXF_RECORD_TYPE_UPDATE_JOURNAL_ENTRIES_LIST:
 			if( libftxf_record_read_update_journal_entry_list(
 			     internal_record,
-			     record_data,
+			     byte_stream,
 			     (size_t) internal_record->size,
 			     error ) != 1 )
 			{
@@ -507,7 +389,7 @@ int libftxf_record_read(
 				 "%s: unable to read update journal entry list.",
 				 function );
 
-				goto on_error;
+				return( -1 );
 			}
 			break;
 
@@ -526,7 +408,7 @@ int libftxf_record_read(
 		 "%s: record data:\n",
 		 function );
 		libcnotify_print_data(
-		 &( record_data[ record_data_offset ] ),
+		 &( byte_stream[ byte_stream_offset ] ),
 		 (size_t) internal_record->size - sizeof( ftxf_record_header_t ),
 		 0 );
 	}
@@ -535,7 +417,7 @@ int libftxf_record_read(
 	if( libcnotify_verbose != 0 )
 	{
 		byte_stream_copy_to_uint64_little_endian(
-		 &( record_data[ record_data_offset ] ),
+		 &( byte_stream[ byte_stream_offset ] ),
 		 value_64bit );
 		libcnotify_printf(
 		 "%s: unknown11\t\t\t\t\t\t: 0x%08" PRIx64 "\n",
@@ -543,12 +425,12 @@ int libftxf_record_read(
 		 value_64bit );
 	}
 #endif
-	record_data_offset += 8;
+	byte_stream_offset += 8;
 
 	if( record_type != 0x00 )
 	{
 		byte_stream_copy_to_uint16_little_endian(
-		 &( record_data[ record_data_offset ] ),
+		 &( byte_stream[ byte_stream_offset ] ),
 		 name_size );
 
 #if defined( HAVE_DEBUG_OUTPUT )
@@ -560,12 +442,12 @@ int libftxf_record_read(
 			 name_size );
 		}
 #endif
-		record_data_offset += 2;
+		byte_stream_offset += 2;
 
 		name_size *= 2;
 
 		byte_stream_copy_to_uint16_little_endian(
-		 &( record_data[ record_data_offset ] ),
+		 &( byte_stream[ byte_stream_offset ] ),
 		 name_offset );
 
 #if defined( HAVE_DEBUG_OUTPUT )
@@ -577,13 +459,13 @@ int libftxf_record_read(
 			 name_offset );
 		}
 #endif
-		record_data_offset += 2;
+		byte_stream_offset += 2;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			byte_stream_copy_to_uint32_little_endian(
-			 &( record_data[ record_data_offset ] ),
+			 &( byte_stream[ byte_stream_offset ] ),
 			 value_32bit );
 			libcnotify_printf(
 			 "%s: unknown13\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
@@ -591,7 +473,7 @@ int libftxf_record_read(
 			 value_32bit );
 		}
 #endif
-		record_data_offset += 4;
+		byte_stream_offset += 4;
 	}
 	if( record_type == 0x02 )
 	{
@@ -603,7 +485,7 @@ int libftxf_record_read(
 		}
 #endif
 /* TODO print debug */
-		record_data_offset += 24;
+		byte_stream_offset += 24;
 	}
 	if( ( record_type == 0x02 )
 	 || ( record_type == 0x07 ) )
@@ -611,256 +493,108 @@ int libftxf_record_read(
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
-			if( libfdatetime_filetime_initialize(
-			     &filetime,
-			     error ) != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-				 "%s: unable to create filetime.",
-				 function );
-
-				goto on_error;
-			}
-		}
-#endif
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
-			if( libfdatetime_filetime_copy_from_byte_stream(
-			     filetime,
-			     &( record_data[ record_data_offset ] ),
+			if( libftxf_debug_print_filetime_value(
+			     function,
+			     "creation time\t\t\t\t\t",
+			     &( byte_stream[ byte_stream_offset ] ),
 			     8,
 			     LIBFDATETIME_ENDIAN_LITTLE,
+			     LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
 			     error ) != 1 )
 			{
 				libcerror_error_set(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime from byte stream.",
+				 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+				 "%s: unable to print FILETIME value.",
 				 function );
 
-				goto on_error;
+				return( -1 );
 			}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-			result = libfdatetime_filetime_copy_to_utf16_string(
-				  filetime,
-				  (uint16_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#else
-			result = libfdatetime_filetime_copy_to_utf8_string(
-				  filetime,
-				  (uint8_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#endif
-			if( result != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime to date time string.",
-				 function );
-
-				goto on_error;
-			}
-			libcnotify_printf(
-			 "%s: creation time\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
-			 function,
-			 date_time_string );
 		}
 #endif
-		record_data_offset += 8;
+		byte_stream_offset += 8;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
-			if( libfdatetime_filetime_copy_from_byte_stream(
-			     filetime,
-			     &( record_data[ record_data_offset ] ),
+			if( libftxf_debug_print_filetime_value(
+			     function,
+			     "modification time\t\t\t\t\t",
+			     &( byte_stream[ byte_stream_offset ] ),
 			     8,
 			     LIBFDATETIME_ENDIAN_LITTLE,
+			     LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
 			     error ) != 1 )
 			{
 				libcerror_error_set(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime from byte stream.",
+				 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+				 "%s: unable to print FILETIME value.",
 				 function );
 
-				goto on_error;
+				return( -1 );
 			}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-			result = libfdatetime_filetime_copy_to_utf16_string(
-				  filetime,
-				  (uint16_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#else
-			result = libfdatetime_filetime_copy_to_utf8_string(
-				  filetime,
-				  (uint8_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#endif
-			if( result != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime to date time string.",
-				 function );
-
-				goto on_error;
-			}
-			libcnotify_printf(
-			 "%s: modification time\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
-			 function,
-			 date_time_string );
 		}
 #endif
-		record_data_offset += 8;
+		byte_stream_offset += 8;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
-			if( libfdatetime_filetime_copy_from_byte_stream(
-			     filetime,
-			     &( record_data[ record_data_offset ] ),
+			if( libftxf_debug_print_filetime_value(
+			     function,
+			     "entry modification time\t\t\t\t",
+			     &( byte_stream[ byte_stream_offset ] ),
 			     8,
 			     LIBFDATETIME_ENDIAN_LITTLE,
+			     LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
 			     error ) != 1 )
 			{
 				libcerror_error_set(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime from byte stream.",
+				 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+				 "%s: unable to print FILETIME value.",
 				 function );
 
-				goto on_error;
+				return( -1 );
 			}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-			result = libfdatetime_filetime_copy_to_utf16_string(
-				  filetime,
-				  (uint16_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#else
-			result = libfdatetime_filetime_copy_to_utf8_string(
-				  filetime,
-				  (uint8_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#endif
-			if( result != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime to date time string.",
-				 function );
-
-				goto on_error;
-			}
-			libcnotify_printf(
-			 "%s: entry modification time\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
-			 function,
-			 date_time_string );
 		}
 #endif
-		record_data_offset += 8;
+		byte_stream_offset += 8;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
-			if( libfdatetime_filetime_copy_from_byte_stream(
-			     filetime,
-			     &( record_data[ record_data_offset ] ),
+			if( libftxf_debug_print_filetime_value(
+			     function,
+			     "access time\t\t\t\t\t",
+			     &( byte_stream[ byte_stream_offset ] ),
 			     8,
 			     LIBFDATETIME_ENDIAN_LITTLE,
+			     LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
 			     error ) != 1 )
 			{
 				libcerror_error_set(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime from byte stream.",
+				 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+				 "%s: unable to print FILETIME value.",
 				 function );
 
-				goto on_error;
-			}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-			result = libfdatetime_filetime_copy_to_utf16_string(
-				  filetime,
-				  (uint16_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#else
-			result = libfdatetime_filetime_copy_to_utf8_string(
-				  filetime,
-				  (uint8_t *) date_time_string,
-				  32,
-			          LIBFDATETIME_STRING_FORMAT_TYPE_CTIME | LIBFDATETIME_STRING_FORMAT_FLAG_DATE_TIME_NANO_SECONDS,
-				  error );
-#endif
-			if( result != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to copy filetime to date time string.",
-				 function );
-
-				goto on_error;
-			}
-			libcnotify_printf(
-			 "%s: access time\t\t\t\t\t: %" PRIs_SYSTEM " UTC\n",
-			 function,
-			 date_time_string );
-		}
-#endif
-		record_data_offset += 8;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
-			if( libfdatetime_filetime_free(
-			     &filetime,
-			     error ) != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free filetime.",
-				 function );
-
-				goto on_error;
+				return( -1 );
 			}
 		}
 #endif
+		byte_stream_offset += 8;
+
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			byte_stream_copy_to_uint64_little_endian(
-			 &( record_data[ record_data_offset ] ),
+			 &( byte_stream[ byte_stream_offset ] ),
 			 value_64bit );
 			libcnotify_printf(
 			 "%s: allocated file size\t\t\t\t: %" PRIu64 "\n",
@@ -868,13 +602,13 @@ int libftxf_record_read(
 			 value_64bit );
 		}
 #endif
-		record_data_offset += 8;
+		byte_stream_offset += 8;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			byte_stream_copy_to_uint64_little_endian(
-			 &( record_data[ record_data_offset ] ),
+			 &( byte_stream[ byte_stream_offset ] ),
 			 value_64bit );
 			libcnotify_printf(
 			 "%s: file size\t\t\t\t\t\t: %" PRIu64 "\n",
@@ -882,13 +616,13 @@ int libftxf_record_read(
 			 value_64bit );
 		}
 #endif
-		record_data_offset += 8;
+		byte_stream_offset += 8;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			byte_stream_copy_to_uint32_little_endian(
-			 &( record_data[ record_data_offset ] ),
+			 &( byte_stream[ byte_stream_offset ] ),
 			 value_32bit );
 			libcnotify_printf(
 			 "%s: file attribute flags\t\t\t\t: 0x%08" PRIx32 "\n",
@@ -900,7 +634,7 @@ int libftxf_record_read(
 			 "\n" );
 		}
 #endif
-		record_data_offset += 4;
+		byte_stream_offset += 4;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
@@ -916,7 +650,7 @@ int libftxf_record_read(
 		if( libcnotify_verbose != 0 )
 		{
 			byte_stream_copy_to_uint64_little_endian(
-			 &( record_data[ record_data_offset ] ),
+			 &( byte_stream[ byte_stream_offset ] ),
 			 value_64bit );
 			libcnotify_printf(
 			 "%s: unknown14\t\t\t\t\t\t: 0x%08" PRIx64 "\n",
@@ -924,7 +658,7 @@ int libftxf_record_read(
 			 value_64bit );
 		}
 #endif
-		record_data_offset += 8;
+		byte_stream_offset += 8;
 	}
 #if defined( HAVE_DEBUG_OUTPUT )
 	else if( libcnotify_verbose != 0 )
@@ -945,83 +679,23 @@ int libftxf_record_read(
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-			result = libuna_utf16_string_size_from_utf16_stream(
-				  &( record_data[ name_offset ] ),
-				  name_size,
-				  LIBUNA_ENDIAN_LITTLE,
-				  &value_string_size,
-				  error );
-#else
-			result = libuna_utf8_string_size_from_utf16_stream(
-				  &( record_data[ name_offset ] ),
-				  name_size,
-				  LIBUNA_ENDIAN_LITTLE,
-				  &value_string_size,
-				  error );
-#endif
-			if( result != 1 )
+			if( libftxf_debug_print_utf16_string_value(
+			     function,
+			     "name\t\t\t\t\t\t",
+			     &( byte_stream[ name_offset ] ),
+			     name_size,
+			     LIBUNA_ENDIAN_LITTLE,
+			     error ) != 1 )
 			{
 				libcerror_error_set(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-				 "%s: unable to determine size of name string.",
+				 LIBCERROR_RUNTIME_ERROR_PRINT_FAILED,
+				 "%s: unable to print UTF-16 string value.",
 				 function );
 
-				goto on_error;
+				return( -1 );
 			}
-			value_string = system_string_allocate(
-			                value_string_size );
-
-			if( value_string == NULL )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_MEMORY,
-				 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-				 "%s: unable to create name string.",
-				 function );
-
-				goto on_error;
-			}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-			result = libuna_utf16_string_copy_from_utf16_stream(
-				  (libuna_utf16_character_t *) value_string,
-				  value_string_size,
-				  &( record_data[ name_offset ] ),
-				  name_size,
-				  LIBUNA_ENDIAN_LITTLE,
-				  error );
-#else
-			result = libuna_utf8_string_copy_from_utf16_stream(
-				  (libuna_utf8_character_t *) value_string,
-				  value_string_size,
-				  &( record_data[ name_offset ] ),
-				  name_size,
-				  LIBUNA_ENDIAN_LITTLE,
-				  error );
-#endif
-			if( result != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
-				 "%s: unable to set name string.",
-				 function );
-
-				goto on_error;
-			}
-			libcnotify_printf(
-			 "%s: name\t\t\t\t\t\t: %" PRIs_SYSTEM "\n",
-			 function,
-			 value_string );
-
-			memory_free(
-			 value_string );
-
-			value_string = NULL;
 		}
 #endif
 	}
@@ -1033,28 +707,6 @@ int libftxf_record_read(
 	}
 #endif
 	return( 1 );
-
-on_error:
-#if defined( HAVE_DEBUG_OUTPUT )
-	if( value_string != NULL )
-	{
-		memory_free(
-		 value_string );
-	}
-	if( filetime != NULL )
-	{
-		libfdatetime_filetime_free(
-		 &filetime,
-		 NULL );
-	}
-	if( guid != NULL )
-	{
-		libfguid_identifier_free(
-		 &guid,
-		 NULL );
-	}
-#endif
-	return( -1 );
 }
 
 /* Reads the update journal entry list

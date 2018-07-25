@@ -33,6 +33,23 @@
 #include "ftxf_test_memory.h"
 #include "ftxf_test_unused.h"
 
+#include "../libftxf/libftxf_record.h"
+
+uint8_t ftxf_test_record_byte_stream[ 208 ] = {
+	0x01, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x19, 0x20, 0x38, 0x49, 0x00, 0x00, 0x00, 0x00,
+	0xfc, 0xc3, 0xf0, 0x82, 0xfb, 0x88, 0xe3, 0x11, 0x8b, 0x6e, 0x52, 0x54, 0x00, 0x12, 0x34, 0x56,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0xbc, 0x43, 0xc6, 0x10, 0x1d, 0xcf, 0x01,
+	0xd0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00, 0x00, 0x70, 0x00, 0x00, 0x00,
+	0x49, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x68, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+	0x16, 0x42, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x93, 0x06, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0x06, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x00, 0x00,
+	0x28, 0x00, 0x3c, 0x00, 0x46, 0x00, 0x6f, 0x00, 0x6e, 0x00, 0x74, 0x00, 0x43, 0x00, 0x61, 0x00,
+	0x63, 0x00, 0x68, 0x00, 0x65, 0x00, 0x2d, 0x00, 0x53, 0x00, 0x79, 0x00, 0x73, 0x00, 0x74, 0x00,
+	0x65, 0x00, 0x6d, 0x00, 0x2e, 0x00, 0x64, 0x00, 0x61, 0x00, 0x74, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
 /* Tests the libftxf_record_initialize function
  * Returns 1 if successful or 0 if not
  */
@@ -266,6 +283,179 @@ on_error:
 	return( 0 );
 }
 
+/* Tests the libftxf_record_copy_from_byte_stream function
+ * Returns 1 if successful or 0 if not
+ */
+int ftxf_test_record_copy_from_byte_stream(
+     void )
+{
+	libcerror_error_t *error         = NULL;
+	libftxf_record_t *record = NULL;
+	int result                       = 0;
+
+	/* Initialize test
+	 */
+	result = libftxf_record_initialize(
+	          &record,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "record",
+	 record );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test regular cases
+	 */
+	result = libftxf_record_copy_from_byte_stream(
+	          record,
+	          ftxf_test_record_byte_stream,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libftxf_record_copy_from_byte_stream(
+	          record,
+	          ftxf_test_record_byte_stream,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test error cases
+	 */
+	result = libftxf_record_copy_from_byte_stream(
+	          NULL,
+	          ftxf_test_record_byte_stream,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libftxf_record_copy_from_byte_stream(
+	          record,
+	          NULL,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libftxf_record_copy_from_byte_stream(
+	          record,
+	          ftxf_test_record_byte_stream,
+	          (size_t) SSIZE_MAX + 1,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Byte stream too small
+	 */
+	result = libftxf_record_copy_from_byte_stream(
+	          record,
+	          ftxf_test_record_byte_stream,
+	          0,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Clean up
+	 */
+	result = libftxf_record_free(
+	          &record,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "record",
+	 record );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	if( record != NULL )
+	{
+		libftxf_record_free(
+		 &record,
+		 NULL );
+	}
+	return( 0 );
+}
+
 /* The main program
  */
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
@@ -289,7 +479,9 @@ int main(
 	 "libftxf_record_free",
 	 ftxf_test_record_free );
 
-	/* TODO: add tests for libftxf_record_read */
+	FTXF_TEST_RUN(
+	 "libftxf_record_copy_from_byte_stream",
+	 ftxf_test_record_copy_from_byte_stream );
 
 #if defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT )
 

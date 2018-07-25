@@ -53,10 +53,10 @@ int libftxf_record_free(
      libcerror_error_t **error );
 
 LIBFTXF_EXTERN \
-int libftxf_record_read(
+int libftxf_record_copy_from_byte_stream(
      libftxf_record_t *txf_record,
-     const uint8_t *record_data,
-     size_t record_data_size,
+     const uint8_t *byte_stream,
+     size_t byte_stream_size,
      libcerror_error_t **error );
 
 int libftxf_record_read_update_journal_entry_list(
