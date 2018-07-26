@@ -145,6 +145,265 @@ int libftxf_record_free(
 	return( 1 );
 }
 
+/* Reads the update journal entry list
+ * Returns 1 if successful or -1 on error
+ */
+int libftxf_internal_record_read_update_journal_entry_list_data(
+     libftxf_internal_record_t *internal_record,
+     const uint8_t *record_data,
+     size_t record_data_size,
+     libcerror_error_t **error )
+{
+	libfusn_record_t *usn_record              = NULL;
+	static char *function                     = "libftxf_internal_record_read_update_journal_entry_list_data";
+	size_t record_data_offset                 = 0;
+	uint64_t record_chain_next_lsn            = 0;
+	uint32_t update_journal_entry_list_offset = 0;
+	uint32_t update_journal_entry_list_size   = 0;
+	uint32_t usn_record_size                  = 0;
+
+#if defined( HAVE_DEBUG_OUTPUT )
+	uint64_t value_64bit                      = 0;
+#endif
+
+	if( internal_record == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid internal record.",
+		 function );
+
+		return( -1 );
+	}
+	if( record_data == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid record data.",
+		 function );
+
+		return( -1 );
+	}
+	if( record_data_size > (size_t) SSIZE_MAX )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: invalid record data size value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( record_data_size < ( sizeof( ftxf_record_header_t ) + 16 ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
+		 "%s: invalid record data value too small.",
+		 function );
+
+		return( -1 );
+	}
+	record_data_offset = sizeof( ftxf_record_header_t );
+
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( libcnotify_verbose != 0 )
+	{
+		libcnotify_printf(
+		 "%s: journal entry list data:\n",
+		 function );
+		libcnotify_print_data(
+		 &( record_data[ record_data_offset ] ),
+		 16,
+		 0 );
+	}
+#endif
+	byte_stream_copy_to_uint64_little_endian(
+	 &( record_data[ record_data_offset ] ),
+	 record_chain_next_lsn );
+
+	record_data_offset += 8;
+
+	byte_stream_copy_to_uint32_little_endian(
+	 &( record_data[ record_data_offset ] ),
+	 update_journal_entry_list_offset );
+
+	record_data_offset += 4;
+
+	byte_stream_copy_to_uint32_little_endian(
+	 &( record_data[ record_data_offset ] ),
+	 update_journal_entry_list_size );
+
+	record_data_offset += 4;
+
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( libcnotify_verbose != 0 )
+	{
+		libcnotify_printf(
+		 "%s: next record lsn\t\t: 0x%08" PRIx64 "\n",
+		 function,
+		 record_chain_next_lsn );
+
+		libcnotify_printf(
+		 "%s: list entries offset\t: 0x%08" PRIx32 "\n",
+		 function,
+		 update_journal_entry_list_offset );
+
+		libcnotify_printf(
+		 "%s: list entries size\t\t: %" PRIu32 "\n",
+		 function,
+		 update_journal_entry_list_size );
+
+		libcnotify_printf(
+		 "\n" );
+	}
+#endif
+	if( ( (size_t) update_journal_entry_list_offset < record_data_offset )
+	 || ( (size_t) update_journal_entry_list_offset > record_data_size ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: update journal entry list offset value out of bounds.",
+		 function );
+
+		goto on_error;
+	}
+	if( ( (size_t) update_journal_entry_list_offset + (size_t) update_journal_entry_list_size ) < record_data_size )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: update journal entry list size value out of bounds.",
+		 function );
+
+		goto on_error;
+	}
+	if( (size_t) update_journal_entry_list_offset > record_data_offset )
+	{
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: update journal entry list trailing data:\n",
+			 function );
+			libcnotify_print_data(
+			 &( record_data[ record_data_offset ] ),
+			 (size_t) update_journal_entry_list_offset - record_data_offset,
+			 0 );
+		}
+#endif
+		record_data_offset = (size_t) update_journal_entry_list_offset;
+	}
+	while( record_data_offset < record_data_size )
+	{
+/* TODO print entry number */
+
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: unknown:\n",
+			 function );
+			libcnotify_print_data(
+			 &( record_data[ record_data_offset ] ),
+			 8,
+			 0 );
+		}
+#endif
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			byte_stream_copy_to_uint64_little_endian(
+			 &( record_data[ record_data_offset ] ),
+			 value_64bit );
+			libcnotify_printf(
+			 "%s: unknown\t\t\t: 0x%08" PRIx64 "\n",
+			 function,
+			 value_64bit );
+		}
+#endif
+		record_data_offset += 8;
+
+		if( libfusn_record_initialize(
+		     &usn_record,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unable to create USN record.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfusn_record_copy_from_byte_stream(
+		     usn_record,
+		     &( record_data[ record_data_offset ] ),
+		     record_data_size - record_data_offset,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_IO,
+			 LIBCERROR_IO_ERROR_READ_FAILED,
+			 "%s: unable to read USN record.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfusn_record_get_size(
+		     usn_record,
+		     &usn_record_size,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+			 "%s: unable to retrieve USN record size.",
+			 function );
+
+			goto on_error;
+		}
+		record_data_offset += (size_t) usn_record_size;
+
+/* TODO do something with USN records */
+		if( libfusn_record_free(
+		     &usn_record,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+			 "%s: unable to free USN record.",
+			 function );
+
+			goto on_error;
+		}
+	}
+	return( 1 );
+
+on_error:
+	if( usn_record != NULL )
+	{
+		libfusn_record_free(
+		 &usn_record,
+		 NULL );
+	}
+	return( -1 );
+}
+
 /* Copies the record from the byte stream
  * Returns 1 if successful or -1 on error
  */
@@ -376,7 +635,7 @@ int libftxf_record_copy_from_byte_stream(
 	switch( record_type )
 	{
 		case LIBFTXF_RECORD_TYPE_UPDATE_JOURNAL_ENTRIES_LIST:
-			if( libftxf_record_read_update_journal_entry_list(
+			if( libftxf_internal_record_read_update_journal_entry_list_data(
 			     internal_record,
 			     byte_stream,
 			     (size_t) internal_record->size,
@@ -707,261 +966,5 @@ int libftxf_record_copy_from_byte_stream(
 	}
 #endif
 	return( 1 );
-}
-
-/* Reads the update journal entry list
- * Returns 1 if successful or -1 on error
- */
-int libftxf_record_read_update_journal_entry_list(
-     libftxf_internal_record_t *internal_record,
-     const uint8_t *record_data,
-     size_t record_data_size,
-     libcerror_error_t **error )
-{
-	libfusn_record_t *usn_record              = NULL;
-	static char *function                     = "libftxf_record_read_update_journal_entry_list";
-	size_t record_data_offset                 = 0;
-	uint64_t record_chain_next_lsn            = 0;
-	uint32_t update_journal_entry_list_offset = 0;
-	uint32_t update_journal_entry_list_size   = 0;
-	uint32_t usn_record_size                  = 0;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	uint64_t value_64bit                      = 0;
-#endif
-
-	if( internal_record == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid internal record.",
-		 function );
-
-		return( -1 );
-	}
-	if( record_data == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid record data.",
-		 function );
-
-		return( -1 );
-	}
-	if( record_data_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid record data size value exceeds maximum.",
-		 function );
-
-		return( -1 );
-	}
-	if( record_data_size < ( sizeof( ftxf_record_header_t ) + 16 ) )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: invalid record data value too small.",
-		 function );
-
-		return( -1 );
-	}
-	record_data_offset = sizeof( ftxf_record_header_t );
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	if( libcnotify_verbose != 0 )
-	{
-		libcnotify_printf(
-		 "%s: journal entry list data:\n",
-		 function );
-		libcnotify_print_data(
-		 &( record_data[ record_data_offset ] ),
-		 16,
-		 0 );
-	}
-#endif
-	byte_stream_copy_to_uint64_little_endian(
-	 &( record_data[ record_data_offset ] ),
-	 record_chain_next_lsn );
-
-	record_data_offset += 8;
-
-	byte_stream_copy_to_uint32_little_endian(
-	 &( record_data[ record_data_offset ] ),
-	 update_journal_entry_list_offset );
-
-	record_data_offset += 4;
-
-	byte_stream_copy_to_uint32_little_endian(
-	 &( record_data[ record_data_offset ] ),
-	 update_journal_entry_list_size );
-
-	record_data_offset += 4;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	if( libcnotify_verbose != 0 )
-	{
-		libcnotify_printf(
-		 "%s: next record lsn\t\t: 0x%08" PRIx64 "\n",
-		 function,
-		 record_chain_next_lsn );
-
-		libcnotify_printf(
-		 "%s: list entries offset\t: 0x%08" PRIx32 "\n",
-		 function,
-		 update_journal_entry_list_offset );
-
-		libcnotify_printf(
-		 "%s: list entries size\t: %" PRIu32 "\n",
-		 function,
-		 update_journal_entry_list_size );
-	}
-#endif
-	if( ( (size_t) update_journal_entry_list_offset < record_data_offset )
-	 || ( (size_t) update_journal_entry_list_offset > record_data_size ) )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: update journal entry list offset value out of bounds.",
-		 function );
-
-		goto on_error;
-	}
-	if( ( (size_t) update_journal_entry_list_offset + (size_t) update_journal_entry_list_size ) < record_data_size )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: update journal entry list size value out of bounds.",
-		 function );
-
-		goto on_error;
-	}
-	if( (size_t) update_journal_entry_list_offset > record_data_offset )
-	{
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
-			libcnotify_printf(
-			 "%s: update journal entry list trailing data:\n",
-			 function );
-			libcnotify_print_data(
-			 &( record_data[ record_data_offset ] ),
-			 (size_t) update_journal_entry_list_offset - record_data_offset,
-			 0 );
-		}
-#endif
-		record_data_offset = (size_t) update_journal_entry_list_offset;
-	}
-	while( record_data_offset < record_data_size )
-	{
-/* TODO print entry number */
-
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
-			libcnotify_printf(
-			 "%s: unknown:\n",
-			 function );
-			libcnotify_print_data(
-			 &( record_data[ record_data_offset ] ),
-			 8,
-			 0 );
-		}
-#endif
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
-			byte_stream_copy_to_uint64_little_endian(
-			 &( record_data[ record_data_offset ] ),
-			 value_64bit );
-			libcnotify_printf(
-			 "%s: unknown\t\t\t: 0x%08" PRIx64 "\n",
-			 function,
-			 value_64bit );
-		}
-#endif
-		record_data_offset += 8;
-
-		if( libfusn_record_initialize(
-		     &usn_record,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-			 "%s: unable to create USN record.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfusn_record_copy_from_byte_stream(
-		     usn_record,
-		     &( record_data[ record_data_offset ] ),
-		     record_data_size - record_data_offset,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_IO,
-			 LIBCERROR_IO_ERROR_READ_FAILED,
-			 "%s: unable to read USN record.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfusn_record_get_size(
-		     usn_record,
-		     &usn_record_size,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-			 "%s: unable to retrieve USN record size.",
-			 function );
-
-			goto on_error;
-		}
-		record_data_offset += (size_t) usn_record_size;
-
-/* TODO do something with USN records */
-		if( libfusn_record_free(
-		     &usn_record,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-			 "%s: unable to free USN record.",
-			 function );
-
-			goto on_error;
-		}
-	}
-	return( 1 );
-
-on_error:
-	if( usn_record != NULL )
-	{
-		libfusn_record_free(
-		 &usn_record,
-		 NULL );
-	}
-	return( -1 );
 }
 

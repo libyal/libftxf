@@ -52,17 +52,17 @@ int libftxf_record_free(
      libftxf_record_t **txf_record,
      libcerror_error_t **error );
 
+int libftxf_internal_record_read_update_journal_entry_list_data(
+     libftxf_internal_record_t *internal_record,
+     const uint8_t *data,
+     size_t data_size,
+     libcerror_error_t **error );
+
 LIBFTXF_EXTERN \
 int libftxf_record_copy_from_byte_stream(
      libftxf_record_t *txf_record,
      const uint8_t *byte_stream,
      size_t byte_stream_size,
-     libcerror_error_t **error );
-
-int libftxf_record_read_update_journal_entry_list(
-     libftxf_internal_record_t *internal_record,
-     const uint8_t *record_data,
-     size_t record_data_size,
      libcerror_error_t **error );
 
 #if defined( __cplusplus )

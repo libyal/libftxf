@@ -35,7 +35,7 @@
 
 #include "../libftxf/libftxf_record.h"
 
-uint8_t ftxf_test_record_byte_stream[ 208 ] = {
+uint8_t ftxf_test_record_data1[ 208 ] = {
 	0x01, 0x00, 0x00, 0x00, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x19, 0x20, 0x38, 0x49, 0x00, 0x00, 0x00, 0x00,
 	0xfc, 0xc3, 0xf0, 0x82, 0xfb, 0x88, 0xe3, 0x11, 0x8b, 0x6e, 0x52, 0x54, 0x00, 0x12, 0x34, 0x56,
@@ -126,6 +126,8 @@ int ftxf_test_record_initialize(
 	          &record,
 	          &error );
 
+	record = NULL;
+
 	FTXF_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
@@ -137,8 +139,6 @@ int ftxf_test_record_initialize(
 
 	libcerror_error_free(
 	 &error );
-
-	record = NULL;
 
 #if defined( HAVE_FTXF_TEST_MEMORY )
 
@@ -283,6 +283,185 @@ on_error:
 	return( 0 );
 }
 
+#if defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT )
+
+/* Tests the libftxf_internal_record_read_update_journal_entry_list_data function
+ * Returns 1 if successful or 0 if not
+ */
+int ftxf_test_internal_record_read_update_journal_entry_list_data(
+     void )
+{
+	libcerror_error_t *error = NULL;
+	libftxf_record_t *record = NULL;
+	int result               = 0;
+
+	/* Initialize test
+	 */
+	result = libftxf_record_initialize(
+	          &record,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "record",
+	 record );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test regular cases
+	 */
+	result = libftxf_internal_record_read_update_journal_entry_list_data(
+	          (libftxf_internal_record_t *) record,
+	          ftxf_test_record_data1,
+	          208,
+	          &error );
+
+FTXF_TEST_FPRINT_ERROR( error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libftxf_internal_record_read_update_journal_entry_list_data(
+	          (libftxf_internal_record_t *) record,
+	          ftxf_test_record_data1,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test error cases
+	 */
+	result = libftxf_internal_record_read_update_journal_entry_list_data(
+	          NULL,
+	          ftxf_test_record_data1,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libftxf_internal_record_read_update_journal_entry_list_data(
+	          (libftxf_internal_record_t *) record,
+	          NULL,
+	          208,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libftxf_internal_record_read_update_journal_entry_list_data(
+	          (libftxf_internal_record_t *) record,
+	          ftxf_test_record_data1,
+	          (size_t) SSIZE_MAX + 1,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Byte stream too small
+	 */
+	result = libftxf_internal_record_read_update_journal_entry_list_data(
+	          (libftxf_internal_record_t *) record,
+	          ftxf_test_record_data1,
+	          0,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FTXF_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Clean up
+	 */
+	result = libftxf_record_free(
+	          &record,
+	          &error );
+
+	FTXF_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "record",
+	 record );
+
+	FTXF_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	if( record != NULL )
+	{
+		libftxf_record_free(
+		 &record,
+		 NULL );
+	}
+	return( 0 );
+}
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT ) */
+
 /* Tests the libftxf_record_copy_from_byte_stream function
  * Returns 1 if successful or 0 if not
  */
@@ -316,7 +495,7 @@ int ftxf_test_record_copy_from_byte_stream(
 	 */
 	result = libftxf_record_copy_from_byte_stream(
 	          record,
-	          ftxf_test_record_byte_stream,
+	          ftxf_test_record_data1,
 	          208,
 	          &error );
 
@@ -329,9 +508,11 @@ int ftxf_test_record_copy_from_byte_stream(
 	 "error",
 	 error );
 
+	/* Read the data twice to catch issues with previous set values
+	 */
 	result = libftxf_record_copy_from_byte_stream(
 	          record,
-	          ftxf_test_record_byte_stream,
+	          ftxf_test_record_data1,
 	          208,
 	          &error );
 
@@ -348,7 +529,7 @@ int ftxf_test_record_copy_from_byte_stream(
 	 */
 	result = libftxf_record_copy_from_byte_stream(
 	          NULL,
-	          ftxf_test_record_byte_stream,
+	          ftxf_test_record_data1,
 	          208,
 	          &error );
 
@@ -384,7 +565,7 @@ int ftxf_test_record_copy_from_byte_stream(
 
 	result = libftxf_record_copy_from_byte_stream(
 	          record,
-	          ftxf_test_record_byte_stream,
+	          ftxf_test_record_data1,
 	          (size_t) SSIZE_MAX + 1,
 	          &error );
 
@@ -404,7 +585,7 @@ int ftxf_test_record_copy_from_byte_stream(
 	 */
 	result = libftxf_record_copy_from_byte_stream(
 	          record,
-	          ftxf_test_record_byte_stream,
+	          ftxf_test_record_data1,
 	          0,
 	          &error );
 
@@ -479,15 +660,17 @@ int main(
 	 "libftxf_record_free",
 	 ftxf_test_record_free );
 
+#if defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT )
+
+	FTXF_TEST_RUN(
+	 "libftxf_internal_record_read_update_journal_entry_list_data",
+	 ftxf_test_internal_record_read_update_journal_entry_list_data );
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT ) */
+
 	FTXF_TEST_RUN(
 	 "libftxf_record_copy_from_byte_stream",
 	 ftxf_test_record_copy_from_byte_stream );
-
-#if defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT )
-
-	/* TODO: add tests for libftxf_record_read_update_journal_entry_list */
-
-#endif /* defined( __GNUC__ ) && !defined( LIBFTXF_DLL_IMPORT ) */
 
 	return( EXIT_SUCCESS );
 
