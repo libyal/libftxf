@@ -28,13 +28,6 @@
  */
 #if !defined( HAVE_LOCAL_LIBFTXF )
 
-/* If libtool DLL support is enabled set LIBFTXF_DLL_EXPORT
- * before including libftxf/extern.h
- */
-#if defined( _WIN32 ) && defined( DLL_EXPORT )
-#define LIBFTXF_DLL_EXPORT
-#endif
-
 #include <libftxf/extern.h>
 
 #define LIBFTXF_EXTERN_VARIABLE	LIBFTXF_EXTERN
