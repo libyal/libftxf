@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libftxf],
- [20180815],
+ [20181001],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -114,9 +114,6 @@ AS_IF(
  [AC_SUBST(
   [libftxf_spec_requires],
   [Requires:])
- AC_SUBST(
-  [libftxf_spec_build_requires],
-  [BuildRequires:])
  ])
 
 dnl Set the date for the dpkg files
