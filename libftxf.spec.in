@@ -10,15 +10,15 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 @libftxf_spec_requires@ @ax_libcerror_spec_requires@ @ax_libcnotify_spec_requires@ @ax_libfdatetime_spec_requires@ @ax_libfguid_spec_requires@ @ax_libfusn_spec_requires@ @ax_libuna_spec_requires@
 BuildRequires: gcc @ax_libcerror_spec_build_requires@ @ax_libcnotify_spec_build_requires@ @ax_libfdatetime_spec_build_requires@ @ax_libfguid_spec_build_requires@ @ax_libfusn_spec_build_requires@ @ax_libuna_spec_build_requires@
 
-%description
+%description -n libftxf
 Library to access the Transactional NTFS (TxF) format
 
-%package devel
+%package -n libftxf-devel
 Summary: Header files and libraries for developing applications for libftxf
 Group: Development/Libraries
 Requires: libftxf = %{version}-%{release}
 
-%description devel
+%description -n libftxf-devel
 Header files and libraries for developing applications for libftxf.
 
 %prep
@@ -39,13 +39,13 @@ rm -rf %{buildroot}
 
 %postun -p /sbin/ldconfig
 
-%files
+%files -n libftxf
 %defattr(644,root,root,755)
 %license COPYING
 %doc AUTHORS README
 %attr(755,root,root) %{_libdir}/*.so.*
 
-%files devel
+%files -n libftxf-devel
 %defattr(644,root,root,755)
 %license COPYING
 %doc AUTHORS README ChangeLog
