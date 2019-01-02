@@ -9,6 +9,8 @@ Homepage: https://github.com/libyal/libftxf
 Package: libftxf
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: libftxf1
+Replaces: libftxf1
 Suggests: libftxf-dbg
 Description: Library to access the Transactional NTFS (TxF) format
  libftxf is a library to access the Transactional NTFS (TxF) format.
