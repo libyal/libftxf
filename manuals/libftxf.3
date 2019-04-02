@@ -1,11 +1,9 @@
-.Dd July 25, 2018
+.Dd April  2, 2019
 .Dt libftxf 3
 .Os libftxf
 .Sh NAME
 .Nm libftxf.h
 .Nd Library to access the Transactional NTFS (TxF) format
-.Sh LIBRARY
-.Lb libftxf
 .Sh SYNOPSIS
 .In libftxf.h
 .Pp
@@ -17,21 +15,21 @@ Error functions
 .Ft void
 .Fn libftxf_error_free "libftxf_error_t **error"
 .Ft int
-.Fn libftxf_error_fprint "libftxf_error_t *error, FILE *stream"
+.Fn libftxf_error_fprint "libftxf_error_t *error" "FILE *stream"
 .Ft int
-.Fn libftxf_error_sprint "libftxf_error_t *error, char *string, size_t size"
+.Fn libftxf_error_sprint "libftxf_error_t *error" "char *string" "size_t size"
 .Ft int
-.Fn libftxf_error_backtrace_fprint "libftxf_error_t *error, FILE *stream"
+.Fn libftxf_error_backtrace_fprint "libftxf_error_t *error" "FILE *stream"
 .Ft int
-.Fn libftxf_error_backtrace_sprint "libftxf_error_t *error, char *string, size_t size"
+.Fn libftxf_error_backtrace_sprint "libftxf_error_t *error" "char *string" "size_t size"
 .Pp
 Record functions
 .Ft int
-.Fn libftxf_record_initialize "libftxf_record_t **txf_record, libftxf_error_t **error"
+.Fn libftxf_record_initialize "libftxf_record_t **txf_record" "libftxf_error_t **error"
 .Ft int
-.Fn libftxf_record_free "libftxf_record_t **txf_record, libftxf_error_t **error"
+.Fn libftxf_record_free "libftxf_record_t **txf_record" "libftxf_error_t **error"
 .Ft int
-.Fn libftxf_record_copy_from_byte_stream "libftxf_record_t *txf_record, const uint8_t *byte_stream, size_t byte_stream_size, libftxf_error_t **error"
+.Fn libftxf_record_copy_from_byte_stream "libftxf_record_t *txf_record" "const uint8_t *byte_stream" "size_t byte_stream_size" "libftxf_error_t **error"
 .Sh DESCRIPTION
 The
 .Fn libftxf_get_version
@@ -49,7 +47,7 @@ Please report bugs of any kind on the project issue tracker: https://github.com/
 These man pages are generated from "libftxf.h".
 .Sh COPYRIGHT
 Copyright (C) 2011-2019, Joachim Metz <joachim.metz@gmail.com>.
-
+.sp
 This is free software; see the source for copying conditions.
 There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .Sh SEE ALSO
