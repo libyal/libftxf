@@ -25,7 +25,7 @@ then
 
 		make install DESTDIR=${PWD}/osx-pkg;
 		mkdir -p ${PWD}/osx-pkg/usr/share/doc/libftxf;
-		cp AUTHORS COPYING NEWS README ${PWD}/osx-pkg/usr/share/doc/libftxf;
+		cp AUTHORS COPYING COPYING.LESSER NEWS README ${PWD}/osx-pkg/usr/share/doc/libftxf;
 
 		pkgbuild --root osx-pkg --identifier com.github.libyal.libftxf --version ${VERSION} --ownership recommended ../libftxf-${VERSION}.pkg;
 	fi
