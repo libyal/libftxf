@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #endif
 
-#include "ftxf_test_libcerror.h"
 #include "ftxf_test_libftxf.h"
 #include "ftxf_test_macros.h"
 #include "ftxf_test_unused.h"
