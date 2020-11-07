@@ -30,7 +30,11 @@
 
 #include <libftxf/extern.h>
 
+#if defined( __CYGWIN__ )
+#define LIBFTXF_EXTERN_VARIABLE	extern
+#else
 #define LIBFTXF_EXTERN_VARIABLE	LIBFTXF_EXTERN
+#endif
 
 #else
 #define LIBFTXF_EXTERN		/* extern */
