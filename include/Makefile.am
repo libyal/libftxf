@@ -19,9 +19,9 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 distclean: clean
-	/bin/rm -f libftxf.h
-	/bin/rm -f libftxf/definitions.h
-	/bin/rm -f libftxf/features.h
-	/bin/rm -f libftxf/types.h
-	/bin/rm -f Makefile
+	-rm -f libftxf.h
+	-rm -f libftxf/definitions.h
+	-rm -f libftxf/features.h
+	-rm -f libftxf/types.h
+	-rm -f Makefile
 
