@@ -1,6 +1,6 @@
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/include \
-	-I$(top_srcdir)/common \
+	-I../include -I$(top_srcdir)/include \
+	-I../common -I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCNOTIFY_CPPFLAGS@ \
 	@LIBUNA_CPPFLAGS@ \
@@ -44,13 +44,11 @@ EXTRA_DIST = \
 	libftxf.rc \
 	libftxf.rc.in
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	libftxf_definitions.h \
+	libftxf.rc \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f libftxf_definitions.h
-	-rm -f libftxf.rc
-	-rm -f Makefile
 
 sources-local: $(BUILT_SOURCES)
 

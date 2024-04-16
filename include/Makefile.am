@@ -15,13 +15,11 @@ EXTRA_DIST = \
 	libftxf/features.h.in \
 	libftxf/types.h.in
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	libftxf.h \
+	libftxf/definitions.h \
+	libftxf/features.h \
+	libftxf/types.h \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f libftxf.h
-	-rm -f libftxf/definitions.h
-	-rm -f libftxf/features.h
-	-rm -f libftxf/types.h
-	-rm -f Makefile
 
