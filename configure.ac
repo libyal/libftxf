@@ -1,12 +1,12 @@
 AC_PREREQ([2.71])
 
 AC_INIT(
- [libftxf],
- [20240710],
- [joachim.metz@gmail.com])
+  [libftxf],
+  [20251127],
+  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
- [include/libftxf.h.in])
+  [include/libftxf.h.in])
 
 AM_INIT_AUTOMAKE([gnu 1.6 tar-ustar])
 AM_EXTRA_RECURSIVE_TARGETS([sources splint])
@@ -94,21 +94,21 @@ CFLAGS="$CFLAGS -Wall";
 
 dnl Check if requires and build requires should be set in spec file
 AS_IF(
- [test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libfdatetime" = xyes || test "x$ac_cv_libfguid" = xyes || test "x$ac_cv_libfusn" = xyes],
- [AC_SUBST(
-  [libftxf_spec_requires],
-  [Requires:])
- ])
+  [test "x$ac_cv_libcerror" = xyes || test "x$ac_cv_libcnotify" = xyes || test "x$ac_cv_libuna" = xyes || test "x$ac_cv_libfdatetime" = xyes || test "x$ac_cv_libfguid" = xyes || test "x$ac_cv_libfusn" = xyes],
+  [AC_SUBST(
+    [libftxf_spec_requires],
+    [Requires:])
+  ])
 
 dnl Set the date for the dpkg files
 AC_SUBST(
- [DPKG_DATE],
- [`date -R 2> /dev/null`])
+  [DPKG_DATE],
+  [`date -R 2> /dev/null`])
 
 dnl Set the date for the spec file
 AC_SUBST(
- [SPEC_DATE],
- [`date +"%a %b %e %Y" 2> /dev/null`])
+  [SPEC_DATE],
+  [`date +"%a %b %e %Y" 2> /dev/null`])
 
 dnl Generate Makefiles
 AC_CONFIG_FILES([Makefile])
