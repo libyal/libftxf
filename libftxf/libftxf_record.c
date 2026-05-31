@@ -716,13 +716,9 @@ int libftxf_record_copy_from_byte_stream(
 			 "%s: name offset\t\t\t\t\t: 0x%04" PRIx16 "\n",
 			 function,
 			 name_offset );
-		}
-#endif
-		byte_stream_offset += 2;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
+			byte_stream_offset += 2;
+
 			byte_stream_copy_to_uint32_little_endian(
 			 &( byte_stream[ byte_stream_offset ] ),
 			 value_32bit );
@@ -730,9 +726,10 @@ int libftxf_record_copy_from_byte_stream(
 			 "%s: unknown13\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
 			 function,
 			 value_32bit );
+
+			byte_stream_offset += 4;
 		}
 #endif
-		byte_stream_offset += 4;
 	}
 	if( record_type == 0x02 )
 	{
@@ -741,10 +738,11 @@ int libftxf_record_copy_from_byte_stream(
 		{
 			libcnotify_printf(
 			 "...\n\n" );
+
+/* TODO print debug */
+			byte_stream_offset += 24;
 		}
 #endif
-/* TODO print debug */
-		byte_stream_offset += 24;
 	}
 	if( ( record_type == 0x02 )
 	 || ( record_type == 0x07 ) )
@@ -770,13 +768,8 @@ int libftxf_record_copy_from_byte_stream(
 
 				return( -1 );
 			}
-		}
-#endif
-		byte_stream_offset += 8;
+			byte_stream_offset += 8;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
 			if( libftxf_debug_print_filetime_value(
 			     function,
 			     "modification time\t\t\t\t\t",
@@ -795,13 +788,8 @@ int libftxf_record_copy_from_byte_stream(
 
 				return( -1 );
 			}
-		}
-#endif
-		byte_stream_offset += 8;
+			byte_stream_offset += 8;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
 			if( libftxf_debug_print_filetime_value(
 			     function,
 			     "entry modification time\t\t\t\t",
@@ -820,13 +808,8 @@ int libftxf_record_copy_from_byte_stream(
 
 				return( -1 );
 			}
-		}
-#endif
-		byte_stream_offset += 8;
+			byte_stream_offset += 8;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
 			if( libftxf_debug_print_filetime_value(
 			     function,
 			     "access time\t\t\t\t\t",
@@ -845,13 +828,8 @@ int libftxf_record_copy_from_byte_stream(
 
 				return( -1 );
 			}
-		}
-#endif
-		byte_stream_offset += 8;
+			byte_stream_offset += 8;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
 			byte_stream_copy_to_uint64_little_endian(
 			 &( byte_stream[ byte_stream_offset ] ),
 			 value_64bit );
@@ -859,13 +837,9 @@ int libftxf_record_copy_from_byte_stream(
 			 "%s: allocated file size\t\t\t\t: %" PRIu64 "\n",
 			 function,
 			 value_64bit );
-		}
-#endif
-		byte_stream_offset += 8;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
+			byte_stream_offset += 8;
+
 			byte_stream_copy_to_uint64_little_endian(
 			 &( byte_stream[ byte_stream_offset ] ),
 			 value_64bit );
@@ -873,13 +847,9 @@ int libftxf_record_copy_from_byte_stream(
 			 "%s: file size\t\t\t\t\t\t: %" PRIu64 "\n",
 			 function,
 			 value_64bit );
-		}
-#endif
-		byte_stream_offset += 8;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
+			byte_stream_offset += 8;
+
 			byte_stream_copy_to_uint32_little_endian(
 			 &( byte_stream[ byte_stream_offset ] ),
 			 value_32bit );
@@ -891,17 +861,13 @@ int libftxf_record_copy_from_byte_stream(
 			 value_32bit );
 			libcnotify_printf(
 			 "\n" );
-		}
-#endif
-		byte_stream_offset += 4;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
+			byte_stream_offset += 4;
+
 			libcnotify_printf(
 			 "...\n\n" );
 		}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
 	}
 	else if( record_type == 0x0b )
 	{
@@ -915,9 +881,10 @@ int libftxf_record_copy_from_byte_stream(
 			 "%s: unknown14\t\t\t\t\t\t: 0x%08" PRIx64 "\n",
 			 function,
 			 value_64bit );
+
+			byte_stream_offset += 8;
 		}
 #endif
-		byte_stream_offset += 8;
 	}
 #if defined( HAVE_DEBUG_OUTPUT )
 	else if( libcnotify_verbose != 0 )
@@ -956,7 +923,7 @@ int libftxf_record_copy_from_byte_stream(
 				return( -1 );
 			}
 		}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
 	}
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
