@@ -24,6 +24,19 @@
 
 #include <common.h>
 
+#if !defined( __CYGWIN__ ) && !defined( _WIN32 ) && defined( __has_attribute )
+#if __has_attribute( visibility )
+#define LIBFTXF_INTERNAL	__attribute__((visibility("hidden"))) extern
+
+#else
+#define LIBFTXF_INTERNAL	extern
+
+#endif /* __has_attribute( visibility ) */
+#else
+#define LIBFTXF_INTERNAL	extern
+
+#endif /* !defined( __CYGWIN__ ) && !defined( _WIN32 ) && defined( __has_attribute ) */
+
 /* Define HAVE_LOCAL_LIBFTXF for local use of libftxf
  */
 #if !defined( HAVE_LOCAL_LIBFTXF )
@@ -32,7 +45,7 @@
 
 #else
 #define LIBFTXF_EXTERN		/* extern */
-#define LIBFTXF_EXTERN_VARIABLE	extern
+#define LIBFTXF_EXTERN_VARIABLE	LIBFTXF_INTERNAL
 
 #endif /* !defined( HAVE_LOCAL_LIBFTXF ) */
 

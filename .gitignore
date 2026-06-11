@@ -1,6 +1,6 @@
 # Files to ignore by git
 #
-# Version: 20251129
+# Version: 20260604
 
 # Generic auto-generated build files
 *~
@@ -127,10 +127,19 @@ stamp-h[1-9]
 /libftxf.spec
 /libftxf/libftxf.rc
 /libftxf/libftxf_definitions.h
+/tests/*.dir
 /tests/*.exe
+/tests/*.log
+/tests/*.tmp
+/tests/atconfig
+/tests/atlocal
 /tests/ftxf_test_error
 /tests/ftxf_test_record
 /tests/ftxf_test_support
+/tests/notify_stream.log
+/tests/package.m4
+/tests/test_library
+/tests/test_manpages
 /tests/tmp*
 
 # Local library dependencies specific files
